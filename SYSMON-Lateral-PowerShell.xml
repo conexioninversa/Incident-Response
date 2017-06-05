@@ -1,0 +1,49 @@
+<<Sysmon schemaversion="3.30">
+   <!-- Capture all hashes -->
+   <HashAlgorithms>md5</HashAlgorithms>
+   <EventFiltering>
+      <!-- Event ID 1 == Process Creation. -->
+      <ProcessCreate onmatch="include"/>
+      <!-- Event ID 2 == File Creation Time. -->
+      <FileCreateTime onmatch="include"/>
+      <!-- Event ID 3 == Network Connection. -->
+      <NetworkConnect onmatch="include">
+         <DestinationPort condition="is">80</DestinationPort>
+         <DestinationPort condition="is">443</DestinationPort>
+         <DestinationPort condition="is">8080</DestinationPort>
+         <DestinationPort condition="is">3389</DestinationPort>
+         <Image condition="contains">cmd.exe</Image>
+         <Image condition="contains">PsExe</Image>
+         <Image condition="contains">winexe</Image>
+         <Image condition="contains">powershell</Image>
+         <Image condition="contains">cscript</Image>
+         <Image condition="contains">mstsc</Image>
+         <Image condition="contains">RTS2App</Image>
+         <Image condition="contains">RTS3App</Image>
+         <Image condition="contains">wmic</Image>
+      </NetworkConnect>
+      <!-- Event ID 5 == Process Terminated. -->
+      <ProcessTerminate onmatch="include"/>
+      <!-- Event ID 6 == Driver Loaded.-->
+      <DriverLoad onmatch="include"/>   
+      <!-- Event ID 7 == Image Loaded. -->
+      <ImageLoad onmatch="include"/>
+      <!-- Event ID 8 == CreateRemoteThread. -->
+      <CreateRemoteThread onmatch="include"/>
+      <!-- Event ID 9 == RawAccessRead. -->
+      <RawAccessRead onmatch="include"/>       
+      <!-- Event ID 10 == ProcessAccess. -->
+      <ProcessAccess onmatch="include">
+         <TargetImage condition="is">C:\Windows\system32\lsass.exe</TargetImage>
+         <SourceImage condition="end with">powershell.exe</SourceImage>
+      </ProcessAccess>
+      <!-- Event ID 11 == FileCreate. -->
+      <FileCreate onmatch="include"/>
+      <!-- Event ID 12,13,14 == RegObject added/deleted, RegValue Set, RegObject Renamed. -->
+      <RegistryEvent onmatch="include"/>
+      <!-- Event ID 15 == FileStream Created. -->
+      <FileCreateStreamHash onmatch="include"/>
+      <!-- Event ID 17 == PipeEvent. -->
+      <PipeEvent onmatch="include"/>    
+  </EventFiltering>
+</Sysmon>
